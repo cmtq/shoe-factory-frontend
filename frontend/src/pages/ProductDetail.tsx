@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ImageGallery from 'react-image-gallery';
 import toast from 'react-hot-toast';
-import { productAPI, inventoryAPI } from '../services/api';
+import { productAPI } from '../services/api';
 import { useCart } from '../hooks/useCart';
-import type { Product, Inventory } from '../types';
+import type { Product } from '../types';
 import 'react-image-gallery/styles/css/image-gallery.css';
 
 const ProductDetail = () => {
@@ -148,22 +148,19 @@ const ProductDetail = () => {
                 <h3 className="font-semibold text-gray-800 mb-3">Оберіть розмір</h3>
                 {availableSizes.length > 0 ? (
                   <div className="grid grid-cols-6 gap-2">
-                    {availableSizes.map((inv) => {
-                      const available = inv.quantity - inv.reservedQuantity;
-                      return (
-                        <button
-                          key={inv.size}
-                          onClick={() => setSelectedSize(inv.size)}
-                          className={`px-4 py-2 border rounded-md transition ${
-                            selectedSize === inv.size
-                              ? 'border-primary-600 bg-primary-50 text-primary-700 font-semibold'
-                              : 'border-gray-300 hover:border-primary-400'
-                          }`}
-                        >
-                          {inv.size}
-                        </button>
-                      );
-                    })}
+                    {availableSizes.map((inv) => (
+                      <button
+                        key={inv.size}
+                        onClick={() => setSelectedSize(inv.size)}
+                        className={`px-4 py-2 border rounded-md transition ${
+                          selectedSize === inv.size
+                            ? 'border-primary-600 bg-primary-50 text-primary-700 font-semibold'
+                            : 'border-gray-300 hover:border-primary-400'
+                        }`}
+                      >
+                        {inv.size}
+                      </button>
+                    ))}
                   </div>
                 ) : (
                   <p className="text-red-600">Немає в наявності</p>

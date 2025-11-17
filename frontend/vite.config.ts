@@ -7,7 +7,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://shoe-factory-backend-zjnvqw-e52790-185-230-64-201.traefik.me',
         changeOrigin: true,
       },
     },

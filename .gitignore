@@ -7,6 +7,12 @@ yarn.lock
 .env
 .env.local
 .env.production
+.env.development
+backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+frontend/.env.development
 
 # Build outputs
 dist/

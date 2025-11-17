@@ -24,9 +24,17 @@ const CategoryFilter = ({
   const loadCategories = async () => {
     try {
       const response = await categoryAPI.getAll();
-      setCategories(response.data);
+      const categoriesData = response.data;
+
+      // Safely handle categories response
+      if (Array.isArray(categoriesData)) {
+        setCategories(categoriesData);
+      } else {
+        setCategories([]);
+      }
     } catch (error) {
       console.error('Error loading categories:', error);
+      setCategories([]);
     }
   };
 

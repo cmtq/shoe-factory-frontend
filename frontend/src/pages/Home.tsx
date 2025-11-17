@@ -14,9 +14,19 @@ const Home = () => {
   const loadFeaturedProducts = async () => {
     try {
       const response = await productAPI.getAll({ limit: 4 });
-      setFeaturedProducts(response.data.products || []);
+      const responseData = response.data;
+
+      // Safely handle different response structures
+      if (Array.isArray(responseData)) {
+        setFeaturedProducts(responseData);
+      } else if (responseData && typeof responseData === 'object' && 'products' in responseData) {
+        setFeaturedProducts(Array.isArray(responseData.products) ? responseData.products : []);
+      } else {
+        setFeaturedProducts([]);
+      }
     } catch (error) {
       console.error('Error loading featured products:', error);
+      setFeaturedProducts([]);
     }
   };
 

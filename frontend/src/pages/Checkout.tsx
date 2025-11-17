@@ -25,6 +25,13 @@ const Checkout = () => {
       return;
     }
 
+    // Validate that all cart items have valid product IDs
+    const invalidItems = cartItems.filter((item) => !item.product?.id);
+    if (invalidItems.length > 0) {
+      toast.error('Деякі товари в кошику некоректні. Будь ласка, очистіть кошик і додайте товари знову.');
+      return;
+    }
+
     setLoading(true);
     try {
       const orderData = {

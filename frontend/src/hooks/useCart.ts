@@ -8,7 +8,21 @@ export const useCart = () => {
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
-      setCartItems(JSON.parse(savedCart));
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        // Filter out any items with invalid product IDs
+        const validCartItems = parsedCart.filter((item: CartItem) => item.product?.id);
+
+        // If some items were invalid, log a warning and update localStorage
+        if (validCartItems.length < parsedCart.length) {
+          console.warn('Removed invalid items from cart');
+        }
+
+        setCartItems(validCartItems);
+      } catch (error) {
+        console.error('Error loading cart from localStorage:', error);
+        setCartItems([]);
+      }
     }
   }, []);
 
@@ -18,6 +32,12 @@ export const useCart = () => {
   }, [cartItems]);
 
   const addToCart = (item: CartItem) => {
+    // Validate that the product has an ID
+    if (!item.product?.id) {
+      console.error('Cannot add item to cart: product is missing ID', item);
+      throw new Error('Invalid product: missing ID');
+    }
+
     setCartItems((prev) => {
       const existingItemIndex = prev.findIndex(
         (i) =>

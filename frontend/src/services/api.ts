@@ -1,11 +1,8 @@
 import axios from 'axios';
 import type { Category, Product, Order, Inventory } from '../types';
 
-// Use environment variable for API URL, fallback to relative path for development proxy
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
-
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: 'http://shoe-factory-backend-zjnvqw-e52790-185-230-64-201.traefik.me/api/',
   headers: {
     'Content-Type': 'application/json',
   },

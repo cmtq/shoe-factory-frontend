@@ -30,10 +30,36 @@ const Catalog = () => {
       if (searchQuery) params.search = searchQuery;
 
       const response = await productAPI.getAll(params);
-      setProducts(response.data.products);
-      setTotalPages(response.data.pagination.totalPages);
+
+      // Handle different possible response structures
+      const responseData = response.data;
+
+      // Check if response has products array
+      if (Array.isArray(responseData)) {
+        // Direct array response
+        setProducts(responseData);
+        setTotalPages(1);
+      } else if (responseData && typeof responseData === 'object') {
+        // Object response with products property
+        const productsData = responseData.products || [];
+        setProducts(Array.isArray(productsData) ? productsData : []);
+
+        // Safely access pagination
+        const paginationData = responseData.pagination;
+        if (paginationData && typeof paginationData === 'object' && 'totalPages' in paginationData) {
+          setTotalPages(paginationData.totalPages || 1);
+        } else {
+          setTotalPages(1);
+        }
+      } else {
+        // Fallback: empty array
+        setProducts([]);
+        setTotalPages(1);
+      }
     } catch (error) {
       console.error('Error loading products:', error);
+      setProducts([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }

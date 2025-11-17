@@ -22,15 +22,40 @@ const ManagerPanel = () => {
           inventoryAPI.getAll(),
           productAPI.getAll(),
         ]);
-        setInventory(invResponse.data);
-        setProducts(prodResponse.data.products || []);
+
+        // Safely handle inventory response
+        const invData = invResponse.data;
+        setInventory(Array.isArray(invData) ? invData : []);
+
+        // Safely handle products response
+        const prodData = prodResponse.data;
+        if (Array.isArray(prodData)) {
+          setProducts(prodData);
+        } else if (prodData && typeof prodData === 'object' && 'products' in prodData) {
+          setProducts(Array.isArray(prodData.products) ? prodData.products : []);
+        } else {
+          setProducts([]);
+        }
       } else {
         const response = await orderAPI.getAll();
-        setOrders(response.data.orders || []);
+        const ordersData = response.data;
+
+        // Safely handle orders response
+        if (Array.isArray(ordersData)) {
+          setOrders(ordersData);
+        } else if (ordersData && typeof ordersData === 'object' && 'orders' in ordersData) {
+          setOrders(Array.isArray(ordersData.orders) ? ordersData.orders : []);
+        } else {
+          setOrders([]);
+        }
       }
     } catch (error) {
       console.error('Error loading data:', error);
       toast.error('Помилка при завантаженні даних');
+      // Reset state on error
+      setInventory([]);
+      setProducts([]);
+      setOrders([]);
     } finally {
       setLoading(false);
     }

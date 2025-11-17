@@ -61,13 +61,6 @@ Frontend буде доступний на `http://localhost:3000`
 
 База даних MySQL автоматично налаштовується при запуску backend.
 
-### Підключення:
-- Host: `shoefactory-maindb-xnqknj`
-- Port: `3306`
-- User: `mysql`
-- Password: `jomlhltwodv03ccx`
-- Database: `shoe_factory`
-
 ## 📝 API Endpoints
 
 ### Категорії:

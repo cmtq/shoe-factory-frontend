@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: shoefactory-maindb-xnqknj
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: shoe_factory
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: jomlhltwodv03ccx
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - shoe-factory-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: shoe-factory-backend
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=shoefactory-maindb-xnqknj
+      - DB_PORT=3306
+      - DB_USER=mysql
+      - DB_PASSWORD=jomlhltwodv03ccx
+      - DB_NAME=shoe_factory
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mysql
+    networks:
+      - shoe-factory-network
+    restart: unless-stopped
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: shoe-factory-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - shoe-factory-network
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  shoe-factory-network:
+    driver: bridge

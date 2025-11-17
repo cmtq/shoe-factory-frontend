@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { Category, Product, Order, Inventory } from '../types';
 
 const api = axios.create({
-  baseURL: http://shoe-factory-backend-zjnvqw-e52790-185-230-64-201.traefik.me/api,
+  baseURL: 'http://shoe-factory-backend-zjnvqw-e52790-185-230-64-201.traefik.me/api',
   headers: {
     'Content-Type': 'application/json',
   },
